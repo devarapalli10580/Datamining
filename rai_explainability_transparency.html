@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RAI Framework – Explainability & Transparency | Naga Venkata Satyanarayana Devarapalli</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #1a1a2e;
+      color: #333;
+      line-height: 1.6;
+    }
+    .slide {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 60px 40px;
+      background: #ffffff;
+      border-bottom: 4px solid #2a5298;
+    }
+    .slide:nth-child(even) {
+      background: #f4f7fb;
+    }
+    .slide-title {
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      color: #fff;
+    }
+    .slide-title h1 {
+      font-size: 2.8rem;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    .slide-title p {
+      font-size: 1.3rem;
+      opacity: 0.9;
+      text-align: center;
+    }
+    .slide h2 {
+      color: #1e3c72;
+      font-size: 2rem;
+      margin-bottom: 25px;
+      text-align: center;
+    }
+    .slide h3 {
+      color: #2a5298;
+      margin-bottom: 10px;
+    }
+    .content {
+      max-width: 1000px;
+      width: 100%;
+    }
+    .content p, .content li {
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+    }
+    .content ul {
+      padding-left: 25px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 1rem;
+    }
+    table th, table td {
+      border: 1px solid #ccc;
+      padding: 14px 16px;
+      text-align: left;
+      vertical-align: top;
+    }
+    table th {
+      background: #1e3c72;
+      color: #fff;
+      font-weight: 600;
+    }
+    table tr:nth-child(even) {
+      background: #eef3fa;
+    }
+    .flowchart {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin: 20px 0;
+    }
+    .flow-step {
+      background: #2a5298;
+      color: #fff;
+      padding: 18px 22px;
+      border-radius: 10px;
+      text-align: center;
+      min-width: 160px;
+      font-weight: 500;
+    }
+    .flow-arrow {
+      display: flex;
+      align-items: center;
+      font-size: 2rem;
+      color: #1e3c72;
+      font-weight: bold;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      margin-top: 20px;
+    }
+    .card {
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border-left: 5px solid #2a5298;
+    }
+    .card h3 {
+      margin-bottom: 10px;
+    }
+    .badge-yes {
+      display: inline-block;
+      background: #28a745;
+      color: #fff;
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+    }
+    .badge-no {
+      display: inline-block;
+      background: #dc3545;
+      color: #fff;
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+    }
+    .badge-partial {
+      display: inline-block;
+      background: #ffc107;
+      color: #333;
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+    }
+    footer {
+      background: #1e3c72;
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+    }
+    @media print {
+      .slide { page-break-after: always; min-height: auto; padding: 40px 30px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Slide 1: Title Slide -->
+<div class="slide slide-title">
+  <h1>Responsible AI Framework:<br>Explainability & Transparency</h1>
+  <p>Naga Venkata Satyanarayana Devarapalli</p>
+  <p style="margin-top: 10px; opacity: 0.75;">Indiana Wesleyan University | 2025</p>
+</div>
+
+<!-- Slide 2: Company Overview -->
+<div class="slide">
+  <div class="content">
+    <h2>Company Overview: NovaMind AI Solutions</h2>
+    <div class="card-grid">
+      <div class="card">
+        <h3>About NovaMind</h3>
+        <p>NovaMind AI Solutions is a mid-size technology company specializing in AI-powered enterprise software for healthcare, finance, and customer service industries. Founded in 2019 and headquartered in Indianapolis, IN, NovaMind serves over 200 enterprise clients across the United States.</p>
+      </div>
+      <div class="card">
+        <h3>Mission</h3>
+        <p>To deliver intelligent, trustworthy, and human-centered AI products that empower organizations to make better decisions while maintaining ethical standards and regulatory compliance.</p>
+      </div>
+      <div class="card">
+        <h3>Key Facts</h3>
+        <ul>
+          <li><strong>Employees:</strong> 850+</li>
+          <li><strong>Annual Revenue:</strong> $120M</li>
+          <li><strong>AI/ML Engineers:</strong> 150+</li>
+          <li><strong>Industries Served:</strong> Healthcare, Finance, Customer Service</li>
+          <li><strong>Compliance:</strong> HIPAA, SOC 2, GDPR-ready</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 3: AI Use Cases -->
+<div class="slide">
+  <div class="content">
+    <h2>AI Use Cases Under Consideration</h2>
+    <div class="card-grid">
+      <div class="card">
+        <h3>1. Clinical Decision Support</h3>
+        <p>An AI system that assists physicians by analyzing patient records, lab results, and medical imaging to recommend potential diagnoses and treatment plans. Used in partner hospitals and clinics.</p>
+      </div>
+      <div class="card">
+        <h3>2. Credit Risk Scoring</h3>
+        <p>A machine learning model that evaluates loan applicants' creditworthiness by analyzing financial history, income patterns, and alternative data sources for banking clients.</p>
+      </div>
+      <div class="card">
+        <h3>3. Customer Service Chatbot</h3>
+        <p>A natural language processing (NLP) chatbot that handles tier-1 customer inquiries, routes complex issues to human agents, and provides 24/7 support for enterprise clients.</p>
+      </div>
+      <div class="card">
+        <h3>4. Internal Document Summarization</h3>
+        <p>An internal AI tool that automatically summarizes lengthy reports, meeting notes, and research papers for employees to improve productivity and knowledge sharing.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 4: Explainability Requirements Chart -->
+<div class="slide">
+  <div class="content">
+    <h2>Explainability Requirements by Use Case</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>AI Use Case</th>
+          <th>Explainability Required?</th>
+          <th>Level</th>
+          <th>Rationale</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Clinical Decision Support</strong></td>
+          <td><span class="badge-yes">Yes – Mandatory</span></td>
+          <td>High</td>
+          <td>Directly impacts patient health outcomes. Physicians need to understand AI reasoning to make informed medical decisions. Regulatory requirements (FDA, HIPAA) mandate transparency in clinical tools. Errors can result in patient harm or legal liability.</td>
+        </tr>
+        <tr>
+          <td><strong>Credit Risk Scoring</strong></td>
+          <td><span class="badge-yes">Yes – Mandatory</span></td>
+          <td>High</td>
+          <td>Subject to fair lending regulations (ECOA, FCRA). Applicants have a legal right to understand why credit was denied. Must demonstrate absence of discriminatory bias. Regulators require model interpretability for audit purposes.</td>
+        </tr>
+        <tr>
+          <td><strong>Customer Service Chatbot</strong></td>
+          <td><span class="badge-partial">Partial – Recommended</span></td>
+          <td>Medium</td>
+          <td>Lower risk since humans handle escalations. Transparency helps users understand bot limitations. Useful for debugging incorrect responses. Not legally required but improves trust and user satisfaction.</td>
+        </tr>
+        <tr>
+          <td><strong>Internal Document Summarization</strong></td>
+          <td><span class="badge-no">No – Optional</span></td>
+          <td>Low</td>
+          <td>Used internally for productivity; no external stakeholder impact. Employees can verify summaries against source documents. Low risk of harm from errors. Explainability is nice-to-have but not critical for deployment.</td>
+        </tr>
+      </tbody>
+    </table>
+    <p><strong>Key Principle:</strong> Explainability requirements scale with the potential impact on individuals' rights, health, financial status, and the degree of regulatory oversight applicable to the domain.</p>
+  </div>
+</div>
+
+<!-- Slide 5: Transparency/Explainability Evaluation Process -->
+<div class="slide">
+  <div class="content">
+    <h2>Process for Evaluating Transparency & Explainability</h2>
+    <div class="flowchart">
+      <div class="flow-step">1. Risk<br>Classification</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">2. Stakeholder<br>Identification</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">3. Explainability<br>Method Selection</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">4. Testing &<br>Validation</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">5. Ongoing<br>Monitoring</div>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Step</th>
+          <th>Description</th>
+          <th>Key Activities</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>1. Risk Classification</strong></td>
+          <td>Categorize the AI system by impact level (High/Medium/Low)</td>
+          <td>Assess potential harm, regulatory scope, affected populations, reversibility of decisions</td>
+        </tr>
+        <tr>
+          <td><strong>2. Stakeholder Identification</strong></td>
+          <td>Identify who needs explanations and at what level of detail</td>
+          <td>Map end users, regulators, internal teams, affected individuals; determine technical vs. non-technical needs</td>
+        </tr>
+        <tr>
+          <td><strong>3. Explainability Method Selection</strong></td>
+          <td>Choose appropriate explanation techniques based on model type and audience</td>
+          <td>Select from SHAP, LIME, feature importance, decision trees, counterfactual explanations, natural language summaries</td>
+        </tr>
+        <tr>
+          <td><strong>4. Testing & Validation</strong></td>
+          <td>Verify that explanations are accurate, consistent, and comprehensible</td>
+          <td>User testing with target audiences, accuracy verification of explanations, consistency checks across similar inputs</td>
+        </tr>
+        <tr>
+          <td><strong>5. Ongoing Monitoring</strong></td>
+          <td>Continuously evaluate explainability as models evolve</td>
+          <td>Regular audits, drift detection, user feedback collection, re-validation after model updates</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Slide 6: Documentation for Transparency -->
+<div class="slide">
+  <div class="content">
+    <h2>Documentation to Promote Transparency</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>AI Development Stage</th>
+          <th>Documentation Artifact</th>
+          <th>Purpose & Contents</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Problem Definition & Planning</strong></td>
+          <td>AI Impact Assessment</td>
+          <td>Documents intended use, affected populations, potential risks, explainability requirements, and ethical considerations before development begins.</td>
+        </tr>
+        <tr>
+          <td><strong>Data Collection & Preparation</strong></td>
+          <td>Data Card / Datasheet</td>
+          <td>Records data sources, collection methods, known biases, representativeness, preprocessing steps, and limitations of training data.</td>
+        </tr>
+        <tr>
+          <td><strong>Model Development</strong></td>
+          <td>Model Card</td>
+          <td>Describes model architecture, training procedures, hyperparameters, performance metrics, intended use cases, known limitations, and fairness evaluations.</td>
+        </tr>
+        <tr>
+          <td><strong>Testing & Validation</strong></td>
+          <td>Evaluation Report</td>
+          <td>Documents test results, bias audits, explainability test outcomes, edge case analysis, and comparison against baseline approaches.</td>
+        </tr>
+        <tr>
+          <td><strong>Deployment</strong></td>
+          <td>Transparency Notice / User Guide</td>
+          <td>Provides end users with clear information about AI involvement, how decisions are made, how to request explanations, and how to appeal automated decisions.</td>
+        </tr>
+        <tr>
+          <td><strong>Post-Deployment Monitoring</strong></td>
+          <td>Audit Log & Monitoring Report</td>
+          <td>Tracks model performance over time, records drift incidents, documents retraining events, logs user feedback, and maintains compliance records.</td>
+        </tr>
+      </tbody>
+    </table>
+    <p><strong>Guiding Standard:</strong> Documentation follows frameworks inspired by Google's Model Cards, Microsoft's Datasheets for Datasets, and the EU AI Act's transparency obligations.</p>
+  </div>
+</div>
+
+<!-- Slide 7: Conclusion -->
+<div class="slide">
+  <div class="content">
+    <h2>Concluding Reflections: Difficulties & Questions</h2>
+    <div class="card-grid">
+      <div class="card">
+        <h3>Challenges Encountered</h3>
+        <ul>
+          <li><strong>Balancing complexity and clarity:</strong> Determining the right level of explanation for different audiences is genuinely difficult. A data scientist and a patient need very different types of explanations from the same system.</li>
+          <li><strong>Explainability vs. performance trade-off:</strong> More interpretable models (e.g., decision trees) often sacrifice predictive accuracy compared to black-box models (e.g., deep neural networks). Deciding where this trade-off is acceptable requires careful ethical judgment.</li>
+          <li><strong>Defining "sufficient" transparency:</strong> There is no universal standard for what makes an AI system "transparent enough." Different regulators, industries, and stakeholders have varying expectations.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Open Questions</h3>
+        <ul>
+          <li>How do we measure whether an explanation is truly understood by its intended audience, rather than just provided?</li>
+          <li>As AI models become more complex (e.g., large language models), will current explainability techniques remain adequate?</li>
+          <li>How should companies handle situations where full transparency might expose proprietary algorithms or create security vulnerabilities?</li>
+          <li>What role should industry self-regulation play versus government-mandated transparency requirements?</li>
+        </ul>
+      </div>
+    </div>
+    <p style="margin-top: 25px; font-style: italic; text-align: center;">
+      These reflections represent my personal observations from engaging with the course material on AI explainability and transparency. The intersection of technical capability and ethical responsibility remains one of the most challenging and important aspects of responsible AI development.
+    </p>
+  </div>
+</div>
+
+<footer>
+  <p>© 2025 Naga Venkata Satyanarayana Devarapalli | RAI Framework – Explainability & Transparency</p>
+  <p style="opacity: 0.7; margin-top: 5px;">Indiana Wesleyan University | Responsible AI Workshop</p>
+</footer>
+
+</body>
+</html>
