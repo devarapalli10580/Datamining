@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Responsible AI – Bias Identification &amp; Mitigation | DataVision Analytics Inc.</title>
+  <style>
+    /* ── Reset & base ─────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f0f4fa;
+      color: #222;
+      line-height: 1.6;
+    }
+
+    /* ── Slide wrapper ────────────────────────────────────────────────── */
+    .slide {
+      width: 100%;
+      max-width: 1100px;
+      margin: 40px auto;
+      background: #ffffff;
+      border-radius: 14px;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.10);
+      overflow: hidden;
+    }
+
+    /* ── Slide header band ────────────────────────────────────────────── */
+    .slide-header {
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      color: #fff;
+      padding: 28px 40px 22px;
+    }
+    .slide-header .slide-num {
+      font-size: 0.78rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      opacity: 0.75;
+      margin-bottom: 4px;
+    }
+    .slide-header h2 {
+      font-size: 1.75rem;
+      font-weight: 700;
+    }
+    .slide-header .subtitle {
+      font-size: 1rem;
+      opacity: 0.85;
+      margin-top: 4px;
+    }
+
+    /* ── Slide body ───────────────────────────────────────────────────── */
+    .slide-body {
+      padding: 36px 40px;
+    }
+
+    /* ── Cover slide ──────────────────────────────────────────────────── */
+    .cover .slide-header {
+      padding: 60px 40px 50px;
+      text-align: center;
+    }
+    .cover .slide-header h1 {
+      font-size: 2.4rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+    .cover .slide-header .tagline {
+      font-size: 1.1rem;
+      opacity: 0.85;
+    }
+    .cover .slide-body {
+      text-align: center;
+      background: #f7f9fd;
+      padding: 28px 40px;
+      font-size: 0.95rem;
+      color: #555;
+    }
+
+    /* ── Two-column layout ────────────────────────────────────────────── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+    }
+
+    /* ── Info cards ───────────────────────────────────────────────────── */
+    .info-card {
+      background: #f7f9fd;
+      border-left: 5px solid #2a5298;
+      border-radius: 8px;
+      padding: 20px 22px;
+    }
+    .info-card h3 {
+      color: #1e3c72;
+      margin-bottom: 8px;
+      font-size: 1.05rem;
+    }
+    .info-card p, .info-card ul {
+      font-size: 0.93rem;
+      color: #444;
+    }
+    .info-card ul { padding-left: 18px; }
+    .info-card li { margin-bottom: 4px; }
+
+    /* ── Use-case cards ───────────────────────────────────────────────── */
+    .uc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+    .uc-card {
+      background: #f0f4fa;
+      border-radius: 10px;
+      padding: 22px 20px;
+      border-top: 4px solid #2a5298;
+    }
+    .uc-card h3 {
+      color: #1e3c72;
+      font-size: 1rem;
+      margin-bottom: 8px;
+    }
+    .uc-card p { font-size: 0.9rem; color: #555; }
+
+    /* ── Tables ───────────────────────────────────────────────────────── */
+    .table-wrap { overflow-x: auto; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+    thead tr {
+      background: #1e3c72;
+      color: #fff;
+    }
+    thead th {
+      padding: 12px 14px;
+      text-align: left;
+      font-weight: 600;
+    }
+    tbody tr:nth-child(even) { background: #f0f4fa; }
+    tbody tr:nth-child(odd)  { background: #fff; }
+    tbody td {
+      padding: 11px 14px;
+      border-bottom: 1px solid #dde3ee;
+      vertical-align: top;
+    }
+    .tag {
+      display: inline-block;
+      background: #dce8ff;
+      color: #1e3c72;
+      font-size: 0.78rem;
+      border-radius: 20px;
+      padding: 2px 10px;
+      margin: 2px 2px 2px 0;
+      font-weight: 600;
+    }
+    .tag.green  { background: #d4f0e0; color: #155724; }
+    .tag.orange { background: #fff3cd; color: #856404; }
+    .tag.red    { background: #fde8e8; color: #721c24; }
+
+    /* ── Pill list ────────────────────────────────────────────────────── */
+    .pill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .pill {
+      background: #dce8ff;
+      color: #1e3c72;
+      font-size: 0.88rem;
+      font-weight: 600;
+      border-radius: 24px;
+      padding: 6px 16px;
+    }
+
+    /* ── Numbered list ────────────────────────────────────────────────── */
+    .numbered-list { counter-reset: nl; padding-left: 0; list-style: none; }
+    .numbered-list li {
+      counter-increment: nl;
+      display: flex;
+      gap: 14px;
+      margin-bottom: 16px;
+      align-items: flex-start;
+    }
+    .numbered-list li::before {
+      content: counter(nl);
+      background: #2a5298;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.85rem;
+      min-width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .numbered-list li .li-content strong { color: #1e3c72; }
+    .numbered-list li .li-content { font-size: 0.93rem; }
+
+    /* ── Section divider label ────────────────────────────────────────── */
+    .section-label {
+      display: inline-block;
+      background: #e8eeff;
+      color: #2a5298;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      border-radius: 4px;
+      padding: 3px 10px;
+      margin-bottom: 14px;
+    }
+
+    /* ── Intro text ───────────────────────────────────────────────────── */
+    .intro-text {
+      font-size: 0.95rem;
+      color: #555;
+      margin-bottom: 24px;
+    }
+
+    /* ── Conclusion box ───────────────────────────────────────────────── */
+    .reflection-box {
+      background: #f7f9fd;
+      border-radius: 10px;
+      padding: 28px 30px;
+      border-left: 6px solid #2a5298;
+      margin-bottom: 22px;
+    }
+    .reflection-box h3 {
+      color: #1e3c72;
+      margin-bottom: 10px;
+      font-size: 1.05rem;
+    }
+    .reflection-box p { font-size: 0.93rem; color: #444; }
+
+    /* ── Footer ───────────────────────────────────────────────────────── */
+    footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 0.85rem;
+      color: #888;
+      background: #fff;
+      border-top: 1px solid #e0e6f0;
+      max-width: 1100px;
+      margin: 0 auto 40px;
+      border-radius: 0 0 14px 14px;
+    }
+
+    /* ── Responsive ───────────────────────────────────────────────────── */
+    @media (max-width: 700px) {
+      .two-col { grid-template-columns: 1fr; }
+      .slide-body, .slide-header { padding: 24px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     COVER
+═══════════════════════════════════════════════════════════════════════════ -->
+<div class="slide cover">
+  <div class="slide-header">
+    <h1>Responsible AI Framework</h1>
+    <p class="tagline">Identifying &amp; Mitigating Sources of Bias in Artificial Intelligence</p>
+  </div>
+  <div class="slide-body">
+    <p><strong>Presenter:</strong> Naga Venkata Satyanarayana Devarapalli &nbsp;|&nbsp;
+       <strong>Course:</strong> AI &amp; Machine Learning – Workshop Assignment 1.4 &nbsp;|&nbsp;
+       <strong>Institution:</strong> Indiana Wesleyan University</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     SLIDE 1 – Company Overview
+═══════════════════════════════════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-num">Slide 1</div>
+    <h2>Company Overview – DataVision Analytics Inc.</h2>
+    <p class="subtitle">Our fictional organization and its mission</p>
+  </div>
+  <div class="slide-body">
+    <div class="two-col">
+      <div>
+        <div class="info-card">
+          <h3>🏢 Who We Are</h3>
+          <p>
+            <strong>DataVision Analytics Inc.</strong> is a mid-sized healthcare data analytics firm
+            founded in 2018 and headquartered in Indianapolis, Indiana.  We partner with hospital
+            networks, insurance providers, and public-health agencies to turn complex clinical and
+            administrative data into actionable intelligence that improves patient outcomes and
+            operational efficiency.
+          </p>
+        </div>
+
+        <div class="info-card" style="margin-top:20px;">
+          <h3>🎯 Mission &amp; Values</h3>
+          <p>
+            <em>"Empowering better health outcomes through ethical, data-driven intelligence."</em>
+          </p>
+          <ul style="margin-top:10px;">
+            <li>Transparency in every model we deploy</li>
+            <li>Equity across all patient populations</li>
+            <li>Accountability at every stage of the AI lifecycle</li>
+            <li>Continuous improvement driven by real-world feedback</li>
+          </ul>
+        </div>
+      </div>
+
+      <div>
+        <div class="info-card">
+          <h3>📊 Key Facts</h3>
+          <ul>
+            <li><strong>Founded:</strong> 2018</li>
+            <li><strong>HQ:</strong> Indianapolis, IN</li>
+            <li><strong>Employees:</strong> ~280</li>
+            <li><strong>Clients:</strong> 45+ hospitals, 12 insurance networks, 6 public-health agencies</li>
+            <li><strong>Annual Data Volume:</strong> &gt; 500 million patient records processed</li>
+            <li><strong>Certifications:</strong> HIPAA compliant, SOC 2 Type II, ISO 27001</li>
+          </ul>
+        </div>
+
+        <div class="info-card" style="margin-top:20px;">
+          <h3>⚙️ Technology Stack</h3>
+          <ul>
+            <li>Cloud: Microsoft Azure (HIPAA BAA in place)</li>
+            <li>ML: Python, Scikit-learn, PyTorch, Azure ML</li>
+            <li>Data: Azure Synapse, Databricks, PostgreSQL</li>
+            <li>Governance: Microsoft Purview, custom data lineage tooling</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     SLIDE 2 – AI Use Cases
+═══════════════════════════════════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-num">Slide 2</div>
+    <h2>AI Use Cases Under Consideration</h2>
+    <p class="subtitle">Four strategic AI applications DataVision is evaluating</p>
+  </div>
+  <div class="slide-body">
+    <p class="intro-text">
+      DataVision Analytics Inc. is currently evaluating four AI initiatives that directly affect
+      patient care quality, financial performance, and resource allocation.  Each use case carries
+      unique data requirements, stakeholder expectations, and bias risks that must be carefully managed.
+    </p>
+    <div class="uc-grid">
+
+      <div class="uc-card">
+        <h3>🏥 UC-1: Patient Risk Stratification</h3>
+        <p>
+          Predict 30-day hospital readmission risk so care teams can intervene proactively.
+          Scores patients at discharge using EHR data, lab results, and social determinants of health (SDOH).
+        </p>
+        <div class="pill-list" style="margin-top:10px;">
+          <span class="pill">Supervised ML</span>
+          <span class="pill">Clinical Impact</span>
+        </div>
+      </div>
+
+      <div class="uc-card">
+        <h3>🩺 UC-2: Clinical Decision Support</h3>
+        <p>
+          Recommend diagnostic pathways and treatment options to clinicians based on patient history,
+          medical literature, and peer-reviewed clinical guidelines.
+        </p>
+        <div class="pill-list" style="margin-top:10px;">
+          <span class="pill">NLP</span>
+          <span class="pill">Recommendation Engine</span>
+        </div>
+      </div>
+
+      <div class="uc-card">
+        <h3>🔍 UC-3: Healthcare Fraud Detection</h3>
+        <p>
+          Identify anomalous billing patterns and fraudulent insurance claims in real time,
+          reducing financial losses and protecting plan members.
+        </p>
+        <div class="pill-list" style="margin-top:10px;">
+          <span class="pill">Anomaly Detection</span>
+          <span class="pill">Graph Analytics</span>
+        </div>
+      </div>
+
+      <div class="uc-card">
+        <h3>📅 UC-4: Resource Allocation Optimizer</h3>
+        <p>
+          Optimize staffing levels, bed assignments, and OR scheduling across hospital networks
+          using demand forecasting and constraint-based optimization.
+        </p>
+        <div class="pill-list" style="margin-top:10px;">
+          <span class="pill">Forecasting</span>
+          <span class="pill">Optimization</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     SLIDE 3 – Data Sources & Bias Chart
+═══════════════════════════════════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-num">Slide 3</div>
+    <h2>Data Sources, Potential Bias Sources &amp; Mitigations</h2>
+    <p class="subtitle">Mapping data inputs to bias risks and remediation strategies</p>
+  </div>
+  <div class="slide-body">
+    <p class="intro-text">
+      The quality, completeness, and representativeness of training data are the first line of
+      defense against AI bias.  The chart below maps each use case's primary data sources to
+      identified bias risks and the specific mitigation strategies DataVision will implement.
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Use Case</th>
+            <th>Primary Data Sources</th>
+            <th>Potential Bias Sources</th>
+            <th>Mitigation Strategies</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>UC-1<br/>Risk Stratification</strong></td>
+            <td>
+              EHR records, lab results, claims data,
+              SDOH indicators (ZIP code, income proxies)
+            </td>
+            <td>
+              <span class="tag red">Historical under-treatment</span>
+              <span class="tag red">Proxy variables (ZIP → race)</span>
+              <span class="tag red">Missing data for underserved groups</span>
+            </td>
+            <td>
+              <span class="tag green">Disaggregate metrics by race, age, sex</span>
+              <span class="tag green">Remove or fairness-test ZIP proxy features</span>
+              <span class="tag green">Oversample underrepresented groups</span>
+              <span class="tag green">Imputation audits for minority records</span>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>UC-2<br/>Clinical Decision Support</strong></td>
+            <td>
+              Medical literature corpora, clinical-trial databases,
+              EHR diagnostic notes (NLP), FDA drug labels
+            </td>
+            <td>
+              <span class="tag red">Clinical trials historically exclude women &amp; minorities</span>
+              <span class="tag red">Publication bias in medical literature</span>
+              <span class="tag red">Language bias in clinical notes</span>
+            </td>
+            <td>
+              <span class="tag green">Curate diverse training corpora</span>
+              <span class="tag green">Validate recommendations across demographic subgroups</span>
+              <span class="tag green">Confidence thresholds + mandatory clinician review</span>
+              <span class="tag green">Audit NLP embeddings for stereotyped associations</span>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>UC-3<br/>Fraud Detection</strong></td>
+            <td>
+              Claims history, provider networks, billing codes,
+              geographic utilization patterns
+            </td>
+            <td>
+              <span class="tag red">Legitimate billing patterns differ by demographics</span>
+              <span class="tag red">Geographic/socioeconomic disparities labeled as fraud</span>
+              <span class="tag red">Historical enforcement bias in labeled data</span>
+            </td>
+            <td>
+              <span class="tag green">Fairness audits comparing false-positive rates by group</span>
+              <span class="tag green">Separate sub-models for different provider specialties</span>
+              <span class="tag green">Human-in-the-loop review before adverse action</span>
+              <span class="tag green">SHAP explanations for every flagged claim</span>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>UC-4<br/>Resource Allocation</strong></td>
+            <td>
+              Historical utilization logs, census demographics,
+              scheduling records, geographic service maps
+            </td>
+            <td>
+              <span class="tag red">Historical inequities embedded in utilization data</span>
+              <span class="tag red">Under-resourced communities appear as low-demand</span>
+              <span class="tag red">Socioeconomic proxies driving allocations</span>
+            </td>
+            <td>
+              <span class="tag green">Add equity constraints to the optimization objective</span>
+              <span class="tag green">Stratify forecasts by community health-need index</span>
+              <span class="tag green">Monitor outcomes by facility zip-code demographics</span>
+              <span class="tag green">Engage community advisory boards in model review</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     SLIDE 4 – Algorithmic Bias Chart
+═══════════════════════════════════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-num">Slide 4</div>
+    <h2>Algorithmic Bias Sources &amp; Proposed Mitigations</h2>
+    <p class="subtitle">Bias that emerges from model design, training objectives, and deployment</p>
+  </div>
+  <div class="slide-body">
+    <p class="intro-text">
+      Beyond data, bias can be introduced by choices made in algorithm design, objective functions,
+      and deployment configurations.  The following chart identifies six categories of algorithmic
+      bias relevant to DataVision's AI portfolio and specifies mitigations at each stage of the
+      ML lifecycle.
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Bias Type</th>
+            <th>Description</th>
+            <th>Affected Use Cases</th>
+            <th>Mitigation Strategy</th>
+            <th>Stage</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Training Data Bias</strong></td>
+            <td>
+              Model learns patterns from historically biased distributions, perpetuating
+              or amplifying existing disparities.
+            </td>
+            <td>UC-1, UC-2, UC-3, UC-4</td>
+            <td>
+              Re-weighting of underrepresented samples; adversarial debiasing during training;
+              balanced mini-batches.
+            </td>
+            <td><span class="tag orange">Training</span></td>
+          </tr>
+          <tr>
+            <td><strong>Label / Measurement Bias</strong></td>
+            <td>
+              Ground-truth labels reflect historical human decisions that were themselves biased
+              (e.g., readmission as a proxy for care quality ignores access barriers).
+            </td>
+            <td>UC-1, UC-3</td>
+            <td>
+              Multi-annotator label review; proxy label analysis; consider alternative outcome
+              definitions that better reflect actual need.
+            </td>
+            <td><span class="tag orange">Training</span></td>
+          </tr>
+          <tr>
+            <td><strong>Feature / Proxy Bias</strong></td>
+            <td>
+              Variables used as predictors correlate strongly with protected attributes
+              (race, gender, disability) even if those attributes are excluded.
+            </td>
+            <td>UC-1, UC-4</td>
+            <td>
+              Fairness-aware feature selection; correlation audits between features and
+              protected attributes; constrained model training that penalizes proxy usage.
+            </td>
+            <td><span class="tag orange">Feature Engineering</span></td>
+          </tr>
+          <tr>
+            <td><strong>Aggregation Bias</strong></td>
+            <td>
+              A single model applied uniformly to a diverse population performs poorly
+              for minority subgroups whose patterns differ from the majority.
+            </td>
+            <td>UC-1, UC-2</td>
+            <td>
+              Subgroup performance analysis; stratified models or calibration layers for
+              key demographic segments; minimum performance floors per subgroup.
+            </td>
+            <td><span class="tag orange">Model Design</span></td>
+          </tr>
+          <tr>
+            <td><strong>Feedback Loop Bias</strong></td>
+            <td>
+              Model predictions influence real-world actions which generate new training data,
+              creating self-reinforcing cycles (e.g., flagging certain communities as
+              high-fraud reduces their legitimate claims, skewing future data).
+            </td>
+            <td>UC-3, UC-4</td>
+            <td>
+              Counterfactual logging; exploration policies; periodic retraining with
+              de-biased datasets; monitoring of outcome distributions over time.
+            </td>
+            <td><span class="tag orange">Deployment</span></td>
+          </tr>
+          <tr>
+            <td><strong>Evaluation Metric Bias</strong></td>
+            <td>
+              Optimizing for overall accuracy can mask poor performance on minority subgroups
+              if they are a small fraction of the dataset.
+            </td>
+            <td>UC-1, UC-2, UC-3, UC-4</td>
+            <td>
+              Adopt fairness metrics alongside accuracy: demographic parity, equalized odds,
+              calibration by group; enforce minimum recall thresholds per demographic cohort.
+            </td>
+            <td><span class="tag orange">Evaluation</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     SLIDE 5 – Testing, Validation & Monitoring
+═══════════════════════════════════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-num">Slide 5</div>
+    <h2>Testing, Validation &amp; Monitoring Procedures</h2>
+    <p class="subtitle">Ensuring AI performs as intended across its full range of use throughout its lifecycle</p>
+  </div>
+  <div class="slide-body">
+    <p class="intro-text">
+      DataVision adopts a four-phase governance lifecycle for every AI model: pre-deployment
+      testing, independent validation, continuous post-deployment monitoring, and scheduled
+      external audits.  The chart below details the procedures, key metrics, and cadence for
+      each phase.
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Phase</th>
+            <th>Key Procedures</th>
+            <th>Fairness &amp; Performance Metrics</th>
+            <th>Responsible Party</th>
+            <th>Cadence</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Phase 1<br/>Pre-Deployment Testing</strong></td>
+            <td>
+              <ul style="padding-left:16px;">
+                <li>Disaggregated performance testing across race, sex, age, payer type</li>
+                <li>Adversarial / red-team testing for edge cases</li>
+                <li>Sensitivity analysis on high-impact features</li>
+                <li>Threshold calibration by demographic cohort</li>
+              </ul>
+            </td>
+            <td>
+              Demographic parity ratio, equalized odds, individual fairness,
+              AUC-ROC per subgroup, calibration curves
+            </td>
+            <td>AI Engineering + Data Ethics Team</td>
+            <td>Before every production release</td>
+          </tr>
+          <tr>
+            <td><strong>Phase 2<br/>Independent Validation</strong></td>
+            <td>
+              <ul style="padding-left:16px;">
+                <li>Hold-out test set from diverse, geographically varied hospitals</li>
+                <li>Clinical expert review panel for UC-1 and UC-2</li>
+                <li>Comparison against clinical guideline baselines</li>
+                <li>NIST AI RMF alignment review</li>
+              </ul>
+            </td>
+            <td>
+              Positive predictive value by subgroup, recall parity,
+              false-positive rate disparity (&lt; 10% gap)
+            </td>
+            <td>Independent Clinical Advisory Board</td>
+            <td>Quarterly and before major model updates</td>
+          </tr>
+          <tr>
+            <td><strong>Phase 3<br/>Continuous Monitoring</strong></td>
+            <td>
+              <ul style="padding-left:16px;">
+                <li>Real-time performance dashboards (Azure ML Monitor)</li>
+                <li>Data drift detection on input distributions</li>
+                <li>Concept drift alerts when accuracy degrades &gt; 2%</li>
+                <li>Disparate-impact ratio tracking per cohort</li>
+                <li>Incident logging with root-cause analysis SLA</li>
+              </ul>
+            </td>
+            <td>
+              Disparate impact ratio (&gt; 0.80), PSI for data drift,
+              KL divergence, operational KPIs (readmission rate, fraud recall)
+            </td>
+            <td>MLOps Team + On-call AI Ethics Officer</td>
+            <td>Continuous (24 / 7 alerts); weekly summary reports</td>
+          </tr>
+          <tr>
+            <td><strong>Phase 4<br/>External Audit</strong></td>
+            <td>
+              <ul style="padding-left:16px;">
+                <li>Third-party bias audit using IBM AI Fairness 360 toolkit</li>
+                <li>Source-code and pipeline review</li>
+                <li>Stakeholder interviews (clinicians, patients, payers)</li>
+                <li>Audit report published internally and shared with clients</li>
+              </ul>
+            </td>
+            <td>
+              Comprehensive fairness scorecard across all protected attributes,
+              compliance with NIST AI RMF, NIST SP 1270
+            </td>
+            <td>Accredited Third-Party Auditor</td>
+            <td>Annually (or after any significant adverse event)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     SLIDE 6 – Additional Tools & Processes for AI Fairness Trust
+═══════════════════════════════════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-num">Slide 6</div>
+    <h2>Tools, Processes &amp; Engagement Activities to Build AI Fairness Trust</h2>
+    <p class="subtitle">Beyond technical mitigations – organizational and community-level actions</p>
+  </div>
+  <div class="slide-body">
+    <div class="section-label">Technical Tools</div>
+    <ul class="numbered-list">
+      <li>
+        <div class="li-content">
+          <strong>IBM AI Fairness 360 (AIF360)</strong><br/>
+          Open-source toolkit providing 70+ fairness metrics and bias mitigation algorithms
+          (reweighing, adversarial debiasing, calibrated equalized odds).  Used in
+          pre-deployment testing and external audits.
+        </div>
+      </li>
+      <li>
+        <div class="li-content">
+          <strong>Microsoft Fairlearn</strong><br/>
+          Integrated into the Azure ML pipeline to enforce fairness constraints at training
+          time and produce interactive fairness dashboards for every model released to production.
+        </div>
+      </li>
+      <li>
+        <div class="li-content">
+          <strong>SHAP &amp; LIME (Explainability)</strong><br/>
+          Every high-stakes prediction (risk score, fraud flag) is accompanied by a SHAP
+          explanation so clinicians and investigators can verify the model is relying on
+          clinically appropriate features.
+        </div>
+      </li>
+      <li>
+        <div class="li-content">
+          <strong>Google What-If Tool (WIT)</strong><br/>
+          Used by AI engineers to explore model behavior across hypothetical scenarios and
+          visualize performance disparities interactively before release.
+        </div>
+      </li>
+    </ul>
+
+    <div class="section-label" style="margin-top:28px;">Processes &amp; Governance</div>
+    <ul class="numbered-list">
+      <li>
+        <div class="li-content">
+          <strong>AI Ethics Review Board</strong><br/>
+          An internal cross-functional committee (legal, clinical, engineering, patient advocates)
+          that approves every AI use case before development begins and reviews high-risk model
+          updates.
+        </div>
+      </li>
+      <li>
+        <div class="li-content">
+          <strong>Model Cards &amp; Datasheets for Datasets</strong><br/>
+          Every model in production has a published Model Card documenting intended use,
+          performance by subgroup, known limitations, and bias mitigations applied.
+        </div>
+      </li>
+      <li>
+        <div class="li-content">
+          <strong>Bias Bug-Bounty Program</strong><br/>
+          Clinical users and external researchers can confidentially report suspected model
+          bias.  Valid submissions are rewarded and trigger a mandatory review sprint.
+        </div>
+      </li>
+      <li>
+        <div class="li-content">
+          <strong>Developer Training – Responsible AI Curriculum</strong><br/>
+          All ML engineers complete a mandatory 16-hour annual curriculum covering AI ethics,
+          fairness metrics, regulatory requirements (HIPAA, emerging AI regulation), and
+          case studies of algorithmic harm in healthcare.
+        </div>
+      </li>
+    </ul>
+
+    <div class="section-label" style="margin-top:28px;">Community Engagement</div>
+    <ul class="numbered-list">
+      <li>
+        <div class="li-content">
+          <strong>Patient &amp; Community Advisory Boards</strong><br/>
+          Representatives from historically underserved communities co-design fairness
+          requirements, review model outputs, and validate that AI recommendations align
+          with community values and lived experience.
+        </div>
+      </li>
+      <li>
+        <div class="li-content">
+          <strong>Transparent Public Reporting</strong><br/>
+          DataVision publishes an annual Responsible AI Report disclosing aggregate fairness
+          metrics, audit findings, and remediation actions taken — increasing external
+          accountability and stakeholder trust.
+        </div>
+      </li>
+      <li>
+        <div class="li-content">
+          <strong>Regulatory Alignment &amp; Standards Participation</strong><br/>
+          Active engagement with NIST AI Risk Management Framework (AI RMF), participation
+          in NIST SP 1270 (Towards a Standard for Identifying and Managing Bias in AI)
+          working groups, and monitoring of evolving EU AI Act obligations.
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     SLIDE 7 – Conclusion / Personal Reflections
+═══════════════════════════════════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-num">Slide 7</div>
+    <h2>Conclusion – Personal Reflections</h2>
+    <p class="subtitle">Difficulties encountered and lingering questions from this workshop</p>
+  </div>
+  <div class="slide-body">
+
+    <div class="reflection-box">
+      <h3>📌 Key Takeaway</h3>
+      <p>
+        Working through this assignment made it clear that responsible AI is not a checkbox —
+        it is an ongoing commitment that requires careful attention at every stage of the data and
+        model lifecycle.  The NIST document <em>"Towards a Standard for Identifying and Managing
+        Bias in Artificial Intelligence"</em> reinforced that bias can enter from data collection
+        all the way through deployment decisions, and that no single technical fix is sufficient
+        on its own.
+      </p>
+    </div>
+
+    <div class="reflection-box">
+      <h3>⚠️ Difficulties Encountered</h3>
+      <p>
+        The most challenging part of this assignment was building the data-source bias chart
+        (Slide 3) for the fraud-detection use case.  It was difficult to distinguish between
+        a genuine fraud signal and a pattern that simply reflects how a particular community
+        utilizes healthcare.  The readings showed that historical enforcement bias in labeled
+        data can be almost invisible — the labels look objective but embed decades of
+        discriminatory decisions.  This made me realize how important it is to trace the
+        provenance of every training label, not just the features.
+      </p>
+      <p style="margin-top:10px;">
+        A second difficulty was deciding which fairness metric to prioritize when different
+        metrics conflict.  For example, maximizing demographic parity in the risk-stratification
+        model can reduce overall accuracy for the majority group.  There is no purely technical
+        answer to that trade-off — it requires a values judgment that must involve clinicians,
+        ethicists, and the affected communities.
+      </p>
+    </div>
+
+    <div class="reflection-box">
+      <h3>❓ Lingering Questions</h3>
+      <ul style="padding-left:18px; margin-top:4px;">
+        <li style="margin-bottom:8px;">
+          <strong>Who is ultimately accountable</strong> when an AI system causes harm —
+          the model developer, the deploying hospital, or the clinical user who acted on
+          the recommendation?  The regulatory landscape is still evolving and there is
+          little consensus.
+        </li>
+        <li style="margin-bottom:8px;">
+          <strong>How do we obtain truly representative training data</strong> in healthcare
+          when patients from marginalized communities may distrust data sharing, yet their
+          absence from training data is itself a form of harm?
+        </li>
+        <li style="margin-bottom:8px;">
+          <strong>Can fairness be quantified across all affected dimensions simultaneously</strong>,
+          or must we always make explicit trade-offs?  If trade-offs are unavoidable, what
+          democratic process should govern them?
+        </li>
+        <li>
+          <strong>How frequently should models be retrained</strong> to remain fair as
+          population demographics and clinical practices shift over time without introducing
+          instability in deployed systems?
+        </li>
+      </ul>
+    </div>
+
+    <div class="reflection-box">
+      <h3>🔭 Looking Ahead</h3>
+      <p>
+        Completing this workshop has strengthened my commitment to building AI systems that
+        are not only technically accurate but equitable and trustworthy.  The frameworks and
+        tools covered — particularly the NIST bias taxonomy and the AI Fairness 360 toolkit —
+        will directly inform how I design and evaluate models throughout my career.
+        I intend to carry these responsible AI principles into every project in my portfolio.
+      </p>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <p>
+    <strong>Naga Venkata Satyanarayana Devarapalli</strong> &nbsp;|&nbsp;
+    Indiana Wesleyan University &nbsp;|&nbsp; AI &amp; Machine Learning Program &nbsp;|&nbsp;
+    Assignment 1.4 – Responsible AI: Bias Identification &amp; Mitigation &nbsp;|&nbsp; 2025
+  </p>
+</footer>
+
+</body>
+</html>
