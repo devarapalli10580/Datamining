@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Responsible AI Framework – Bias Identification & Mitigation</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #1a1a2e;
+      color: #e0e0e0;
+      line-height: 1.6;
+    }
+    .slide {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 60px 40px;
+      border-bottom: 3px solid #2a5298;
+    }
+    .slide:nth-child(even) { background: #16213e; }
+    .slide:nth-child(odd) { background: #1a1a2e; }
+    .slide h1 {
+      font-size: 2.8rem;
+      color: #4fc3f7;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .slide h2 {
+      font-size: 2rem;
+      color: #81d4fa;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    .slide h3 {
+      font-size: 1.4rem;
+      color: #b3e5fc;
+      margin-bottom: 10px;
+    }
+    .slide p, .slide li {
+      font-size: 1.1rem;
+      max-width: 900px;
+      margin-bottom: 10px;
+    }
+    .slide ul {
+      list-style: disc;
+      padding-left: 30px;
+      max-width: 900px;
+    }
+    .content {
+      max-width: 1000px;
+      width: 100%;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      background: #0f3460;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    th {
+      background: #2a5298;
+      color: #ffffff;
+      padding: 14px 16px;
+      text-align: left;
+      font-size: 1rem;
+    }
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid #1a1a2e;
+      font-size: 0.95rem;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #1a3a5c; }
+    .subtitle {
+      font-size: 1.3rem;
+      color: #b0bec5;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    .badge {
+      display: inline-block;
+      background: #2a5298;
+      color: #e0e0e0;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      margin: 3px;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      width: 100%;
+      max-width: 1000px;
+      margin-top: 20px;
+    }
+    .card {
+      background: #0f3460;
+      padding: 25px;
+      border-radius: 12px;
+      border-left: 4px solid #4fc3f7;
+    }
+    .card h3 { margin-bottom: 10px; }
+    .nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(15, 52, 96, 0.95);
+      padding: 12px 20px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      z-index: 1000;
+      flex-wrap: wrap;
+    }
+    .nav a {
+      color: #4fc3f7;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: bold;
+    }
+    .nav a:hover { text-decoration: underline; }
+    .reflection {
+      background: #0d2137;
+      border-left: 4px solid #ff7043;
+      padding: 20px 25px;
+      border-radius: 8px;
+      margin-top: 20px;
+      max-width: 900px;
+    }
+    .reflection p { color: #ffcc80; }
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #0f3460;
+      color: #90a4ae;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="#title">Home</a>
+  <a href="#company">Company</a>
+  <a href="#usecases">Use Cases</a>
+  <a href="#databias">Data Bias</a>
+  <a href="#algobias">Algorithmic Bias</a>
+  <a href="#testing">Testing &amp; Monitoring</a>
+  <a href="#tools">Trust &amp; Tools</a>
+  <a href="#conclusion">Conclusion</a>
+</nav>
+
+<!-- Slide 1: Title -->
+<section class="slide" id="title">
+  <h1>Responsible AI Framework</h1>
+  <p class="subtitle">Bias Identification &amp; Mitigation Strategy</p>
+  <p style="text-align:center; margin-top:20px;">
+    <strong>Prepared by:</strong> Naga Venkata Satyanarayana Devarapalli<br/>
+    Indiana Wesleyan University<br/>
+    DTAN Workshop – Responsible AI
+  </p>
+</section>
+
+<!-- Slide 2: Company Overview -->
+<section class="slide" id="company">
+  <div class="content">
+    <h1>Company Overview</h1>
+    <h2>NovaCare Health Solutions</h2>
+    <p style="text-align:center; margin-bottom:20px;">A fictional mid-size healthcare technology company leveraging AI to improve patient outcomes.</p>
+    <div class="card-grid">
+      <div class="card">
+        <h3>Industry</h3>
+        <p>Healthcare Technology &amp; Digital Health Services</p>
+      </div>
+      <div class="card">
+        <h3>Mission</h3>
+        <p>To deliver personalized, equitable, and data-driven healthcare solutions using responsible AI.</p>
+      </div>
+      <div class="card">
+        <h3>Size &amp; Reach</h3>
+        <p>1,200 employees serving 50+ hospital networks and 3 million patients across the United States.</p>
+      </div>
+      <div class="card">
+        <h3>Core Values</h3>
+        <p>Patient safety, equity, transparency, continuous improvement, and ethical innovation.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 3: AI Use Cases -->
+<section class="slide" id="usecases">
+  <div class="content">
+    <h1>AI Use Cases Under Consideration</h1>
+    <div class="card-grid">
+      <div class="card">
+        <h3>1. Predictive Patient Readmission</h3>
+        <p>Use ML models to predict which patients are at high risk of hospital readmission within 30 days, enabling proactive intervention.</p>
+        <span class="badge">Classification</span>
+        <span class="badge">EHR Data</span>
+      </div>
+      <div class="card">
+        <h3>2. AI-Assisted Diagnostic Imaging</h3>
+        <p>Deploy deep learning to assist radiologists in detecting early-stage tumors and abnormalities in X-rays and MRIs.</p>
+        <span class="badge">Computer Vision</span>
+        <span class="badge">Deep Learning</span>
+      </div>
+      <div class="card">
+        <h3>3. Patient Triage Chatbot</h3>
+        <p>An NLP-powered chatbot that triages patient symptoms, provides guidance, and routes to appropriate care levels.</p>
+        <span class="badge">NLP</span>
+        <span class="badge">Conversational AI</span>
+      </div>
+      <div class="card">
+        <h3>4. Treatment Recommendation Engine</h3>
+        <p>Analyze patient history and clinical guidelines to suggest personalized treatment plans for physicians to review.</p>
+        <span class="badge">Recommendation System</span>
+        <span class="badge">Clinical Data</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 4: Data Bias Chart -->
+<section class="slide" id="databias">
+  <div class="content">
+    <h1>Data Sources, Potential Bias &amp; Mitigations</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>AI Use Case</th>
+          <th>Data Sources</th>
+          <th>Potential Sources of Bias</th>
+          <th>Mitigation Strategies</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Predictive Readmission</td>
+          <td>Electronic Health Records (EHR), insurance claims, socioeconomic data</td>
+          <td>Underrepresentation of uninsured or rural patients; historical disparities in care documentation</td>
+          <td>Augment datasets with community health data; stratified sampling; regular demographic audits</td>
+        </tr>
+        <tr>
+          <td>Diagnostic Imaging</td>
+          <td>Hospital radiology archives, public medical imaging datasets (e.g., CheXpert)</td>
+          <td>Training images skewed toward certain demographics; equipment variation across facilities</td>
+          <td>Curate diverse imaging datasets across age, ethnicity, and sex; normalize for imaging hardware differences</td>
+        </tr>
+        <tr>
+          <td>Patient Triage Chatbot</td>
+          <td>Patient-reported symptoms, prior call-center logs, clinical literature</td>
+          <td>Language and literacy bias; cultural differences in symptom reporting; lack of multilingual data</td>
+          <td>Include multilingual training data; user-test with diverse populations; use plain-language design</td>
+        </tr>
+        <tr>
+          <td>Treatment Recommendation</td>
+          <td>Clinical trial results, patient histories, pharmacological databases</td>
+          <td>Historical clinical trials underrepresent minorities and women; publication bias toward positive results</td>
+          <td>Weight data from inclusive trials; incorporate FDA diversity guidelines; flag confidence levels for underrepresented groups</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- Slide 5: Algorithmic Bias Chart -->
+<section class="slide" id="algobias">
+  <div class="content">
+    <h1>Algorithmic Bias &amp; Proposed Mitigations</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Source of Algorithmic Bias</th>
+          <th>Description</th>
+          <th>Affected Use Cases</th>
+          <th>Proposed Mitigation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Label Bias</td>
+          <td>Historical labels reflect existing disparities (e.g., readmission coded differently across hospitals)</td>
+          <td>Predictive Readmission, Treatment Recommendation</td>
+          <td>Standardize labeling criteria; use consensus labeling; conduct inter-annotator agreement checks</td>
+        </tr>
+        <tr>
+          <td>Feature Selection Bias</td>
+          <td>Proxy variables (e.g., ZIP code) inadvertently encode race or income</td>
+          <td>All use cases</td>
+          <td>Conduct fairness-aware feature selection; use causal inference to identify proxy features; apply feature ablation testing</td>
+        </tr>
+        <tr>
+          <td>Model Complexity Bias</td>
+          <td>Overly complex models may overfit to majority patterns and underperform on minority groups</td>
+          <td>Diagnostic Imaging, Treatment Recommendation</td>
+          <td>Evaluate performance across subgroups; apply regularization; use ensemble methods balancing precision and fairness</td>
+        </tr>
+        <tr>
+          <td>Feedback Loop Bias</td>
+          <td>Model outputs influence future data collection, reinforcing existing biases</td>
+          <td>Triage Chatbot, Predictive Readmission</td>
+          <td>Implement exploration strategies; periodic retraining with fresh data; human-in-the-loop review of edge cases</td>
+        </tr>
+        <tr>
+          <td>Optimization Objective Bias</td>
+          <td>Optimizing solely for accuracy may sacrifice equity across demographic groups</td>
+          <td>All use cases</td>
+          <td>Use multi-objective optimization including fairness metrics (equalized odds, demographic parity); set minimum performance thresholds per subgroup</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- Slide 6: Testing, Validation, and Monitoring -->
+<section class="slide" id="testing">
+  <div class="content">
+    <h1>Testing, Validation &amp; Monitoring Procedures</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Phase</th>
+          <th>Activity</th>
+          <th>Description</th>
+          <th>Frequency</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Pre-Deployment</td>
+          <td>Bias Auditing</td>
+          <td>Evaluate model outputs across protected attributes (age, sex, race, income) using fairness metrics</td>
+          <td>Before every release</td>
+        </tr>
+        <tr>
+          <td>Pre-Deployment</td>
+          <td>Adversarial Testing</td>
+          <td>Stress-test models with edge cases, out-of-distribution inputs, and adversarial examples</td>
+          <td>Before every release</td>
+        </tr>
+        <tr>
+          <td>Pre-Deployment</td>
+          <td>Clinical Validation</td>
+          <td>Validate AI recommendations against expert clinician judgments in blinded studies</td>
+          <td>Initial deployment &amp; major updates</td>
+        </tr>
+        <tr>
+          <td>Post-Deployment</td>
+          <td>Performance Monitoring</td>
+          <td>Track accuracy, precision, recall, and fairness metrics in production dashboards</td>
+          <td>Continuous (real-time)</td>
+        </tr>
+        <tr>
+          <td>Post-Deployment</td>
+          <td>Drift Detection</td>
+          <td>Monitor for data drift and concept drift; alert when model performance degrades</td>
+          <td>Weekly automated checks</td>
+        </tr>
+        <tr>
+          <td>Post-Deployment</td>
+          <td>User Feedback Loops</td>
+          <td>Collect clinician and patient feedback on AI outputs; flag disagreements for review</td>
+          <td>Ongoing</td>
+        </tr>
+        <tr>
+          <td>Periodic Review</td>
+          <td>Model Retraining</td>
+          <td>Retrain models with updated, balanced datasets incorporating new demographic data</td>
+          <td>Quarterly</td>
+        </tr>
+        <tr>
+          <td>Periodic Review</td>
+          <td>Third-Party Audit</td>
+          <td>Engage independent auditors to review AI systems for bias, safety, and regulatory compliance</td>
+          <td>Annually</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- Slide 7: Tools, Processes, and Engagement -->
+<section class="slide" id="tools">
+  <div class="content">
+    <h1>Tools, Processes &amp; Engagement Activities</h1>
+    <h2>Building Trust in AI Fairness</h2>
+    <div class="card-grid">
+      <div class="card">
+        <h3>Fairness Toolkits</h3>
+        <ul>
+          <li>IBM AI Fairness 360</li>
+          <li>Microsoft Fairlearn</li>
+          <li>Google What-If Tool</li>
+          <li>Aequitas (bias audit toolkit)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Governance Processes</h3>
+        <ul>
+          <li>AI Ethics Review Board (cross-functional)</li>
+          <li>Model Risk Management Framework</li>
+          <li>Mandatory bias impact assessments before deployment</li>
+          <li>Documented model cards for every production model</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Stakeholder Engagement</h3>
+        <ul>
+          <li>Patient advisory panels for feedback on AI-driven care</li>
+          <li>Community health organization partnerships</li>
+          <li>Clinician training on AI limitations and overrides</li>
+          <li>Public transparency reports on AI performance</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Regulatory Alignment</h3>
+        <ul>
+          <li>HIPAA compliance for patient data</li>
+          <li>FDA AI/ML regulatory guidance adherence</li>
+          <li>NIST AI Risk Management Framework (AI RMF)</li>
+          <li>EU AI Act readiness assessment</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 8: Conclusion -->
+<section class="slide" id="conclusion">
+  <div class="content">
+    <h1>Conclusion &amp; Personal Reflections</h1>
+    <div class="reflection">
+      <h3>Difficulties &amp; Questions from This Workshop</h3>
+      <p>
+        One of the biggest challenges I encountered during this material was understanding how to balance competing fairness metrics. For instance, achieving demographic parity in one dimension (e.g., equal prediction rates across racial groups) can sometimes conflict with equalized odds (equal error rates). Deciding which fairness definition to prioritize requires deep domain context and stakeholder input, and there is no one-size-fits-all answer.
+      </p>
+      <br/>
+      <p>
+        Another difficulty was recognizing how deeply embedded bias can be in data that appears objective. Electronic health records, for example, reflect decades of systemic inequities in access to care. Simply training on historical data without intervention perpetuates those inequities. This realization highlighted the importance of proactive data curation and the limitations of purely technical solutions.
+      </p>
+      <br/>
+      <p>
+        A question I still have is: How do smaller organizations with limited resources implement comprehensive bias monitoring? The tools and processes described in literature often assume large teams and budgets. Identifying scalable, practical approaches for smaller companies remains an open challenge that I hope to explore further in my career.
+      </p>
+    </div>
+    <br/>
+    <p style="text-align:center; color:#90a4ae; margin-top:30px;">
+      <em>This concluding reflection represents my own thoughts and was not generated by AI.</em>
+    </p>
+  </div>
+</section>
+
+<footer>
+  <p>© 2025 Naga Venkata Satyanarayana Devarapalli | NovaCare Health Solutions – Responsible AI Framework</p>
+  <p><a href="po.html" style="color:#4fc3f7;">← Back to Portfolio</a></p>
+</footer>
+
+</body>
+</html>
